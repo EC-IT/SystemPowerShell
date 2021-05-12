@@ -1,12 +1,12 @@
 ﻿# MPE - AVRIL/MAI 2021
 # GENERATE FLOW MATRIX FROM LOGS
 
-$dirlogs = "C:\Temp\*SEND*txt"
+$dirlogs = "C:\Temp\logs\"
 $fileslist = Get-ChildItem $dirlogs -Filter *SEND*TOTAL.txt
 
 $subnets = @() 
-$subnets += , ("subnet1","10.10.0.0/16","^10\.149")
-$subnets += , ("subnet2","172.16.0.0/24","^172\.16\.0")
+$subnets += , ("subnet1","10.10.0.0/16","^10\.10")
+$subnets += , ("subnet2","172.16.0.0/24","^172\.16")
 $subnets += , ("port_web","0.0.0.0/0"," (80|443)$")
 
 foreach ( $file in $fileslist)
@@ -14,7 +14,7 @@ foreach ( $file in $fileslist)
     echo $file.FullName
     $files = $file.FullName
     $pfirewall= Get-Content $files  | Where { $_ -notmatch "^(::|169\.254)" }
-    $rules_files = "C:\Temp\" + [io.path]::GetFileNameWithoutExtension($files) + ".rules.txt"
+    $rules_files = $dirlogs + [io.path]::GetFileNameWithoutExtension($files) + ".rules.txt"
 
     $rules_list = @()
     foreach ( $subnet in $subnets )
